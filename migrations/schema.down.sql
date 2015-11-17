@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS gaurdians;
+DROP TABLE IF EXISTS kids;

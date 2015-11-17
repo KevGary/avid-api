@@ -1,0 +1,228 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Avid API
+  description: >
+    #### Backend for Avid Project
+basePath: /
+parameters:
+  id:
+    name: id
+    in: path
+    description: id
+    type: integer
+    required: true
+definitions:
+  Links:
+    type: object
+  GaurdiansCollection:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GaurdiansResource'
+  GaurdianDocument:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        $ref: '#/definitions/GaurdiansResource'
+  GaurdiansResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+        - gaurdian
+      id:
+        type: integer
+      attributes:
+        $ref: '#/definitions/Gaurdian'
+      links:
+        $ref: '#/definitions/Links'
+  Gaurdian:
+    type: object
+    properties:
+      name:
+        type: string
+  Error:
+    type: object
+    properties:
+      error:
+        type: array
+        items:
+          type: object
+          properties:
+            status:
+              type: string
+            source:
+              type: object
+              properties:
+                pointer:
+                  type: string
+            title:
+              type: string
+            details:
+              type: string
+  KidsCollection:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/KidsResource'
+  KidDocument:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        $ref: '#/definitions/KidsResource'
+  KidsResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+        - kid
+      id:
+        type: integer
+      attributes:
+        $ref: '#/definitions/Kid'
+      links:
+        $ref: '#/definitions/Links'
+  Kid:
+    type: object
+    properties:
+      name:
+        type: string
+      gender:
+        type: string
+      age:
+        type: integer
+  Error:
+    type: object
+    properties:
+      error:
+        type: array
+        items:
+          type: object
+          properties:
+            status:
+              type: string
+            source:
+              type: object
+              properties:
+                pointer:
+                  type: string
+            title:
+              type: string
+            details:
+              type: string
+paths:
+  '/gaurdians':
+    get:
+      description: >
+        Get all gaurdians
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/GaurdiansCollection'
+    post:
+      description: >
+        Posts a new gaurdian
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/GaurdianDocument'
+        '400':
+          description: Validation error
+          schema:
+            $ref: '#/definitions/Error'
+      parameters:
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - gaurdian
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+  '/gaurdians/{id}':
+    get:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Get one gaurdian
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/GaurdiansCollection'
+  '/kids':
+    get:
+      description: >
+        Get all kids
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/KidsCollection'
+  #   post:
+  #     description: >
+  #       Posts a new kid
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         schema:
+  #           $ref: '#/definitions/KidDocument'
+  #       '400':
+  #         description: Validation error
+  #         schema:
+  #           $ref: '#/definitions/Error'
+  #     parameters:
+  #       - name: Payload
+  #         in: body
+  #         schema:
+  #           type: object
+  #           properties:
+  #             data:
+  #               type: object
+  #               properties:
+  #                 type:
+  #                   type: string
+  #                   enum:
+  #                   - kid
+  #                 attributes:
+  #                   type: object
+  #                   properties:
+  #                     name:
+  #                       type: string
+  # '/kids/{id}':
+  #   get:
+  #     parameters:
+  #       - $ref: '#/parameters/id'
+  #     description: >
+  #       Get one kid
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         schema:
+  #           $ref: '#/definitions/KidsCollection'
