@@ -339,6 +339,37 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/GuardiansCollection'
+  '/guardians/delete':
+    delete:
+      description: >
+        Delete all guardians
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/GuardiansCollection'
+  '/guardians/delete/{id}':
+    delete:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Delete one guardian
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/GuardiansCollection'
+  # '/guardians/update/{id}':
+  #   get:
+  #     parameters:
+  #       - $ref: '#/parameters/id'
+  #     description: >
+  #       Update one guardian
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         schema:
+  #           $ref: '#/definitions/GuardiansCollection'
   '/kids':
     get:
       description: >
@@ -393,6 +424,26 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/KidsCollection'
+  '/kids/delete':
+    delete:
+      description: >
+        Delete all kids
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/KidsCollection'
+  '/kids/delete/{id}':
+    delete:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Delete one kid
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/KidsCollection'
   '/activities':
     get:
       description: >
@@ -438,6 +489,26 @@ paths:
         - $ref: '#/parameters/id'
       description: >
         Get one activity
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ActivitiesCollection'
+  '/activities/delete':
+    delete:
+      description: >
+        Delete all activities
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ActivitiesCollection'
+  '/activities/delete/{id}':
+    delete:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Delete one activity
       responses:
         '200':
           description: Success
@@ -495,6 +566,26 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/RelationshipsCollection'
+  '/relationships/delete':
+    delete:
+      description: >
+        Delete all relationships
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RelationshipsCollection'
+  '/relationships/delete/{id}':
+    delete:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Delete one relationship
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RelationshipsCollection'
   '/interests':
     get:
       description: >
@@ -542,6 +633,26 @@ paths:
         - $ref: '#/parameters/id'
       description: >
         Get one interest
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/InterestsCollection'
+  '/interests/delete':
+    delete:
+      description: >
+        Delete all interests
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/InterestsCollection'
+  '/interests/delete/{id}':
+    delete:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Delete one interest
       responses:
         '200':
           description: Success

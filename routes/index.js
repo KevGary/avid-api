@@ -41,7 +41,6 @@ router.post('/guardians', function(req, res, next) {
     });
   });
 });
-
 //get one
 router.get('/guardians/:id', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -52,6 +51,57 @@ router.get('/guardians/:id', function(req, res, next) {
     client.query('SELECT * FROM guardians WHERE id = $1', [req.params.id], function(err, result) {
       done();
       console.log(req.params.id)
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//update one
+// router.get('/guardians/update/:id', function(req, res, next) {
+//   pg.connect(conString, function(err, client, done) {
+//     if (err) {
+//       return console.error('error fetching client from pool', err);
+//     }
+//     console.log("connected to database");
+//     client.query('UPDATE guardians SET name = $1 WHERE id = $2', [req.body.data.attributes.name, req.params.id], function(err, result) {
+//       done();
+//       console.log(req.params.id)
+//       if (err) {
+//         return console.error('error running query', err);
+//       }
+//       res.send(result);
+//     });
+//   });
+// });
+//delete all
+router.delete('/guardians/delete', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM guardians', function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete one
+router.delete('/guardians/delete/:id', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM guardians WHERE id = $1',[req.params.id], function(err, result) {
+      done();
       if (err) {
         return console.error('error running query', err);
       }
@@ -78,7 +128,6 @@ router.get('/kids', function(req, res, next) {
     });
   });
 });
-
 //insert one
 router.post('/kids', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -96,7 +145,6 @@ router.post('/kids', function(req, res, next) {
     });
   });
 });
-
 //get one
 router.get('/kids/:id', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -107,6 +155,40 @@ router.get('/kids/:id', function(req, res, next) {
     client.query('SELECT * FROM kids WHERE id = $1', [req.params.id], function(err, result) {
       done();
       console.log(req.params.id)
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete all
+router.delete('/kids/delete', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM kids', function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete one
+router.delete('/kids/delete/:id', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM kids WHERE id = $1',[req.params.id], function(err, result) {
+      done();
       if (err) {
         return console.error('error running query', err);
       }
@@ -151,7 +233,6 @@ router.post('/activities', function(req, res, next) {
     });
   });
 });
-
 //get one
 router.get('/activities/:id', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -162,6 +243,40 @@ router.get('/activities/:id', function(req, res, next) {
     client.query('SELECT * FROM activities WHERE id = $1', [req.params.id], function(err, result) {
       done();
       console.log(req.params.id)
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete all
+router.delete('/activities/delete', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM activities', function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete one
+router.delete('/activities/delete/:id', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM activities WHERE id = $1',[req.params.id], function(err, result) {
+      done();
       if (err) {
         return console.error('error running query', err);
       }
@@ -206,7 +321,6 @@ router.post('/relationships', function(req, res, next) {
     });
   });
 });
-
 //get one
 router.get('/relationships/:id', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -217,6 +331,40 @@ router.get('/relationships/:id', function(req, res, next) {
     client.query('SELECT * FROM relationships WHERE id = $1', [req.params.id], function(err, result) {
       done();
       console.log(req.params.id)
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete all
+router.delete('/relationships/delete', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM relationships', function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete one
+router.delete('/relationships/delete/:id', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM relationships WHERE id = $1',[req.params.id], function(err, result) {
+      done();
       if (err) {
         return console.error('error running query', err);
       }
@@ -243,7 +391,6 @@ router.get('/interests', function(req, res, next) {
     });
   });
 });
-
 //post one
 router.post('/interests', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -261,7 +408,6 @@ router.post('/interests', function(req, res, next) {
     });
   });
 });
-
 //get one
 router.get('/interests/:id', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -279,6 +425,41 @@ router.get('/interests/:id', function(req, res, next) {
     });
   });
 });
+//delete all
+router.delete('/interests/delete', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM interests', function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+//delete one
+router.delete('/interests/delete/:id', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+     console.log(conString)
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('DELETE FROM interests WHERE id = $1',[req.params.id], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+
 
 
 
