@@ -1,5 +1,5 @@
 INSERT INTO
-  gaurdians
+  guardians
 VALUES
   ( default, 'Rachel Gimp' ),
   ( default, 'Richard Levy' ),
@@ -17,3 +17,24 @@ VALUES
   ( default, 'Jackie Cariah', 'female', 7 ),
   ( default, 'Phil Strongholde', 'male', 9),
   ( default, 'Rosie Rallycaps', 'female', 7 );
+
+INSERT INTO
+  activities
+VALUES
+  ( default, 'Basketball' ),
+  ( default, 'Baseball' ),
+  ( default, 'Running' ),
+  ( default, 'Jungle Gym' ),
+  ( default, 'Hiking' ),
+  ( default, 'Swimming' );
+
+
+INSERT INTO
+  relationships
+VALUES
+  ( default, (SELECT id FROM gaurdians WHERE id = 1), (SELECT id FROM kids WHERE id = 1) );
+
+INSERT INTO
+  interests
+VALUES
+  ( default, (SELECT id FROM kids WHERE id = 1), (SELECT id FROM activities WHERE id = 1) );

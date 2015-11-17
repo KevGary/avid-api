@@ -15,7 +15,7 @@ parameters:
 definitions:
   Links:
     type: object
-  GaurdiansCollection:
+  GuardiansCollection:
     type: object
     properties:
       links:
@@ -23,15 +23,15 @@ definitions:
       data:
         type: array
         items:
-          $ref: '#/definitions/GaurdiansResource'
-  GaurdianDocument:
+          $ref: '#/definitions/GuardiansResource'
+  GuardianDocument:
     type: object
     properties:
       links:
         $ref: '#/definitions/Links'
       data:
-        $ref: '#/definitions/GaurdiansResource'
-  GaurdiansResource:
+        $ref: '#/definitions/GuardiansResource'
+  GuardiansResource:
     type: object
     properties:
       type:
@@ -41,10 +41,10 @@ definitions:
       id:
         type: integer
       attributes:
-        $ref: '#/definitions/Gaurdian'
+        $ref: '#/definitions/Guardian'
       links:
         $ref: '#/definitions/Links'
-  Gaurdian:
+  Guardian:
     type: object
     properties:
       name:
@@ -125,24 +125,187 @@ definitions:
               type: string
             details:
               type: string
+  ActivitiesCollection:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ActivitiesResource'
+  ActivityDocument:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        $ref: '#/definitions/ActivitiesResource'
+  ActivitiesResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+        - activity
+      id:
+        type: integer
+      attributes:
+        $ref: '#/definitions/Activity'
+      links:
+        $ref: '#/definitions/Links'
+  Activity:
+    type: object
+    properties:
+      name:
+        type: string
+  Error:
+    type: object
+    properties:
+      error:
+        type: array
+        items:
+          type: object
+          properties:
+            status:
+              type: string
+            source:
+              type: object
+              properties:
+                pointer:
+                  type: string
+            title:
+              type: string
+            details:
+              type: string
+  RelationshipsCollection:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/RelationshipsResource'
+  RelationshipDocument:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        $ref: '#/definitions/RelationshipsResource'
+  RelationshipsResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+        - relationship
+      id:
+        type: integer
+      attributes:
+        $ref: '#/definitions/Relationship'
+      links:
+        $ref: '#/definitions/Links'
+  Relationship:
+    type: object
+    properties:
+      gaurdian_id:
+        type: integer
+      kid_id:
+        type: integer
+  Error:
+    type: object
+    properties:
+      error:
+        type: array
+        items:
+          type: object
+          properties:
+            status:
+              type: string
+            source:
+              type: object
+              properties:
+                pointer:
+                  type: string
+            title:
+              type: string
+            details:
+              type: string
+  InterestsCollection:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/InterestsResource'
+  InterestDocument:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      data:
+        $ref: '#/definitions/InterestsResource'
+  InterestsResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+        - interest
+      id:
+        type: integer
+      attributes:
+        $ref: '#/definitions/Interest'
+      links:
+        $ref: '#/definitions/Links'
+  Interest:
+    type: object
+    properties:
+      kid_id:
+        type: integer
+      activity_id:
+        type: integer
+  Error:
+    type: object
+    properties:
+      error:
+        type: array
+        items:
+          type: object
+          properties:
+            status:
+              type: string
+            source:
+              type: object
+              properties:
+                pointer:
+                  type: string
+            title:
+              type: string
+            details:
+              type: string
 paths:
-  '/gaurdians':
+  '/guardians':
     get:
       description: >
-        Get all gaurdians
+        Get all guardians
       responses:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/GaurdiansCollection'
+            $ref: '#/definitions/GuardiansCollection'
     post:
       description: >
-        Posts a new gaurdian
+        Posts a new guardian
       responses:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/GaurdianDocument'
+            $ref: '#/definitions/GuardianDocument'
         '400':
           description: Validation error
           schema:
@@ -165,17 +328,17 @@ paths:
                     properties:
                       name:
                         type: string
-  '/gaurdians/{id}':
+  '/guardians/{id}':
     get:
       parameters:
         - $ref: '#/parameters/id'
       description: >
-        Get one gaurdian
+        Get one guardian
       responses:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/GaurdiansCollection'
+            $ref: '#/definitions/GuardiansCollection'
   '/kids':
     get:
       description: >
@@ -185,44 +348,202 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/KidsCollection'
-  #   post:
-  #     description: >
-  #       Posts a new kid
-  #     responses:
-  #       '200':
-  #         description: Success
-  #         schema:
-  #           $ref: '#/definitions/KidDocument'
-  #       '400':
-  #         description: Validation error
-  #         schema:
-  #           $ref: '#/definitions/Error'
-  #     parameters:
-  #       - name: Payload
-  #         in: body
-  #         schema:
-  #           type: object
-  #           properties:
-  #             data:
-  #               type: object
-  #               properties:
-  #                 type:
-  #                   type: string
-  #                   enum:
-  #                   - kid
-  #                 attributes:
-  #                   type: object
-  #                   properties:
-  #                     name:
-  #                       type: string
-  # '/kids/{id}':
-  #   get:
-  #     parameters:
-  #       - $ref: '#/parameters/id'
-  #     description: >
-  #       Get one kid
-  #     responses:
-  #       '200':
-  #         description: Success
-  #         schema:
-  #           $ref: '#/definitions/KidsCollection'
+    post:
+      description: >
+        Posts a new kid
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/KidDocument'
+        '400':
+          description: Validation error
+          schema:
+            $ref: '#/definitions/Error'
+      parameters:
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - kid
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      gender:
+                        type: string
+                      age:
+                        type: integer
+  '/kids/{id}':
+    get:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Get one kid
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/KidsCollection'
+  '/activities':
+    get:
+      description: >
+        Get all activities
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ActivitiesCollection'
+    post:
+      description: >
+        Posts a new activity
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ActivityDocument'
+        '400':
+          description: Validation error
+          schema:
+            $ref: '#/definitions/Error'
+      parameters:
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - kid
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+  '/activities/{id}':
+    get:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Get one activity
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ActivitiesCollection'
+  '/relationships':
+    get:
+      description: >
+        Get all relationships
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RelationshipsCollection'
+    post:
+      description: >
+        Posts a new relationship
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RelationshipDocument'
+        '400':
+          description: Validation error
+          schema:
+            $ref: '#/definitions/Error'
+      parameters:
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - relationship
+                  attributes:
+                    type: object
+                    properties:
+                      gaurdian_id:
+                        type: integer
+                      kid_id:
+                        type: integer
+  '/relationships/{id}':
+    get:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Get one relationship
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RelationshipsCollection'
+  '/interests':
+    get:
+      description: >
+        Get all interests
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/InterestsCollection'
+    post:
+      description: >
+        Posts a new interest
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/InterestDocument'
+        '400':
+          description: Validation error
+          schema:
+            $ref: '#/definitions/Error'
+      parameters:
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - interest
+                  attributes:
+                    type: object
+                    properties:
+                      gaurdian_id:
+                        type: integer
+                      kid_id:
+                        type: integer
+  '/interests/{id}':
+    get:
+      parameters:
+        - $ref: '#/parameters/id'
+      description: >
+        Get one interest
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/InterestsCollection'
