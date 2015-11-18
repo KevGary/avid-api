@@ -32,7 +32,7 @@ VALUES
 INSERT INTO
   relationships
 VALUES
-  ( default, (SELECT id FROM gaurdians WHERE id = 1), (SELECT id FROM kids WHERE id = 1) );
+  ( default, (SELECT id FROM guardians WHERE id = 1), (SELECT id FROM kids WHERE id = 1) );
 
 INSERT INTO
   interests

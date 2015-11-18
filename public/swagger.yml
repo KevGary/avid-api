@@ -37,7 +37,7 @@ definitions:
       type:
         type: string
         enum:
-        - gaurdian
+        - guardian
       id:
         type: integer
       attributes:
@@ -48,6 +48,10 @@ definitions:
     type: object
     properties:
       name:
+        type: string
+      email:
+        type: string
+      password:
         type: string
   Error:
     type: object
@@ -210,7 +214,7 @@ definitions:
   Relationship:
     type: object
     properties:
-      gaurdian_id:
+      guardian_id:
         type: integer
       kid_id:
         type: integer
@@ -322,11 +326,15 @@ paths:
                   type:
                     type: string
                     enum:
-                    - gaurdian
+                    - guardian
                   attributes:
                     type: object
                     properties:
                       name:
+                        type: string
+                      email:
+                        type: string
+                      password:
                         type: string
   '/guardians/{id}':
     get:
@@ -339,6 +347,31 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/GuardiansCollection'
+  '/guardians/update/{id}':
+    put:
+      parameters:
+        - $ref: '#/parameters/id'
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - guardian
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      password:
+                        type: string 
   '/guardians/delete':
     delete:
       description: >
@@ -359,17 +392,6 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/GuardiansCollection'
-  # '/guardians/update/{id}':
-  #   get:
-  #     parameters:
-  #       - $ref: '#/parameters/id'
-  #     description: >
-  #       Update one guardian
-  #     responses:
-  #       '200':
-  #         description: Success
-  #         schema:
-  #           $ref: '#/definitions/GuardiansCollection'
   '/kids':
     get:
       description: >
@@ -424,6 +446,31 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/KidsCollection'
+  '/kids/update/{id}':
+    put:
+      parameters:
+        - $ref: '#/parameters/id'
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - guardian
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      gender:
+                        type: string
+                      age:
+                        type: integer
   '/kids/delete':
     delete:
       description: >
@@ -494,6 +541,36 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/ActivitiesCollection'
+  '/activities/update/{id}':
+    put:
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ActivityDocument'
+        '400':
+          description: Validation error
+          schema:
+            $ref: '#/definitions/Error'
+      parameters:
+        - $ref: '#/parameters/id'
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - activity
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
   '/activities/delete':
     delete:
       description: >
@@ -551,7 +628,7 @@ paths:
                   attributes:
                     type: object
                     properties:
-                      gaurdian_id:
+                      guardian_id:
                         type: integer
                       kid_id:
                         type: integer
@@ -566,6 +643,29 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/RelationshipsCollection'
+  '/relationships/update/{id}':
+    put:
+      parameters:
+        - $ref: '#/parameters/id'
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - guardian
+                  attributes:
+                    type: object
+                    properties:
+                      guardian_id:
+                        type: integer
+                      kid_id:
+                        type: integer
   '/relationships/delete':
     delete:
       description: >
@@ -623,9 +723,9 @@ paths:
                   attributes:
                     type: object
                     properties:
-                      gaurdian_id:
-                        type: integer
                       kid_id:
+                        type: integer
+                      activity_id:
                         type: integer
   '/interests/{id}':
     get:
@@ -638,6 +738,29 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/InterestsCollection'
+  '/interests/update/{id}':
+    put:
+      parameters:
+        - $ref: '#/parameters/id'
+        - name: Payload
+          in: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - interest
+                  attributes:
+                    type: object
+                    properties:
+                      kid_ids:
+                        type: integer
+                      activity_id:
+                        type: integer
   '/interests/delete':
     delete:
       description: >

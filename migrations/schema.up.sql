@@ -1,6 +1,8 @@
 CREATE TABLE guardians (
   id serial primary key,
-  name varchar(60)
+  name varchar(60),
+  email varchar(60),
+  password varchar(120) 
 );
 
 CREATE TABLE kids (
@@ -17,12 +19,12 @@ CREATE TABLE activities (
 
 CREATE TABLE relationships (
   id serial primary key,
-  guardian_id int references guardians(id) ON DELETE cascade,
-  kid_id int references kids(id) ON DELETE CASCADE
+  guardian_id integer references guardians(id) ON DELETE cascade,
+  kid_id integer references kids(id) ON DELETE CASCADE
 );
 
 CREATE TABLE interests (
   id serial primary key,
-  kid_id int references kids(id) ON DELETE CASCADE,
-  activity_id int references activities(id) ON DELETE cascade
+  kid_id integer references kids(id) ON DELETE CASCADE,
+  activity_id integer references activities(id) ON DELETE cascade
 );
