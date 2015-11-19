@@ -1,44 +1,88 @@
 var express = require('express');
 var router = express.Router();
-var promise = require('promise');
+var Promise = require('promise');
+var jwt = require('jsonwebtoken');
+var expressJwt = require('express-jwt');
+var bcrypt = require('bcrypt');
+
+var jwtSecret = process.env.SECRET;
+
 //pg config
 var pg = require('pg');
-var conString = process.env.DATABASE_URL;
+var conString = process.env.DATABASE_URL
 
-
-
-//authenticate
-// var bcrypt = require('bcrypt');
-// router.post('/login/{id}', function(req, res, next){
+var storedUser = {
+      email: 'money',
+      password: 'p',
+}
+router.use(expressJwt({secret: process.env.SECRET}).unless({ path: [ '/login' ] }));
+//Authenticate
+router.get('/random-user', function(req, res, next) {
+  pg.connect(conString, function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    var random = Math.floor(Math.random() * (6)) + 1;
+    client.query('SELECT * FROM guardians WHERE id = $1', [random], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+// router.post('/register', function(req, res, next) {
 //   pg.connect(conString, function(err, client, done) {
-//      console.log(conString)
 //     if (err) {
 //       return console.error('error fetching client from pool', err);
 //     }
 //     console.log("connected to database");
-//     client.query('SELECT * FROM guardians WHERE id = $1', [req.params.id], function(err, result) {
+//       // var hash = bcrypt.hashSync(req.body.data.attributes.password, 8);
+//     client.query('INSERT INTO guardians(name, email, password) VALUES($1, $2, $3) returning id', [req.body.user.name, req.body.user.email, req.body.user.password], function(err, result) {
 //       done();
-//       console.log(req.params.id)
-//       if (err) {
-//         return conƒsole.error('error running query', err);
-//       }
-//       res.send(result);
-//     });
-//     client.query('SELECT * FROM guardians WHERE email = $1 AND password = $2', [req.body.data.attributes.email, req.body.data.attributes.password], function(err, result) {
-//       done();
-//       if (err) {
+//       if(err) {
 //         return console.error('error running query', err);
 //       }
 //       res.send(result);
 //     });
 //   });
+
+//   console.log(req.body)
+//   var token = jwt.sign({
+//     email: storedUser.email
+//   }, jwtSecret);
+//   res.send({
+//     token: token,
+//     user: storedUser
+//   })
 // });
+router.post('/login', authenticate, function(req, res, next) {
+  var token = jwt.sign({
+    email: storedUser.email
+  }, jwtSecret);
+  res.send({
+    token: token,
+    user: storedUser
+  })
+});
+
+//UTIL FNCS
+function authenticate(req, res, next) {
+  if(req.body.user.email == "" || req.body.user.password == "") {
+    res.status(400).end('Must provide username and password');
+  }
+  if(req.body.user.email !== storedUser.email || req.body.user.password !== storedUser.password) {
+    res.status(400).end('User or password incorrect');
+  }
+  next();
+}
 
 //Guardians
 //get all
 router.get('/guardians', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
-     console.log(conString)
     if (err) {
       return console.error('error fetching client from pool', err);
     }
@@ -60,14 +104,13 @@ router.post('/guardians', function(req, res, next) {
       return console.error('error fetching client from pool', err);
     }
     console.log("connected to database");
-    // var hash = bcrypt.hashSync(req.body.data.attributes.password, 12);
-    client.query('INSERT INTO guardians(name, email, password) VALUES($1, $2, $3) returning id', [req.body.data.attributes.name, req.body.data.attributes.email, req.body.data.attributes.password], function(err, result) {
+    var hash = bcrypt.hashSync(req.body.data.attributes.password, 8);
+    client.query('INSERT INTO guardians(name, email, password) VALUES($1, $2, $3) returning id', [req.body.data.attributes.name, req.body.data.attributes.email, hash], function(err, result) {
       done();
       if(err) {
         return console.error('error running query', err);
       }
       res.send(result);
-      //output: 1 
     });
   });
 });
@@ -95,7 +138,8 @@ router.put('/guardians/update/:id', function(req, res, next) {
       return console.error('error fetching client from pool', err);
     }
     console.log("connected to database");
-    console.log(req.body);
+    //query for password (storedPW)
+    //compare with .compareSync(req.body.data.attributes.password, storedPW)
     client.query('UPDATE guardians SET name = $2, email = $3, password = $4  WHERE id = $1', [req.params.id, req.body.data.attributes.name, req.body.data.attributes.email, req.body.data.attributes.password], function(err, result) {
       done();
       console.log(req.params.id)

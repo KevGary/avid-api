@@ -1,12 +1,12 @@
 INSERT INTO
   guardians
 VALUES
-  ( default, 'Rachel Gimp' ),
-  ( default, 'Richard Levy' ),
-  ( default, 'Lynold Friedman' ),
-  ( default, 'Mary Cariah' ),
-  ( default, 'Tom Strongholde' ),
-  ( default, 'Sally Rallycaps' );
+  ( default, 'Rachel Gimp', 'rachelgimp@example.com', 'fruitloops' ),
+  ( default, 'Richard Levy', 'richardlevy@example.com', 'down' ),
+  ( default, 'Lynold Friedman', 'lynoldfriedman@example.com', 'up' ),
+  ( default, 'Mary Cariah', 'marycariah@example.com', 'red' ),
+  ( default, 'Tom Strongholde', 'tomstrongholde@example.com', 'blue' ),
+  ( default, 'Sally Rallycaps', 'sallyrallycaps@example.com', 'green' );
 
 INSERT INTO
   kids
