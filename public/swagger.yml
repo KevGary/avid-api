@@ -12,6 +12,18 @@ parameters:
     description: id
     type: integer
     required: true
+  guardian_id:
+    name: guardian_id
+    in: path
+    description: id
+    type: integer
+    required: true
+  kid_id:
+    name: kid_id
+    in: path
+    description: kid_id
+    type: integer
+    required: true
 definitions:
   Links:
     type: object
@@ -272,6 +284,8 @@ definitions:
       kid_id:
         type: integer
       activity_id:
+        type: integer
+      duration:
         type: integer
   Error:
     type: object
@@ -571,6 +585,28 @@ paths:
                     properties:
                       name:
                         type: string
+  # '/kids/{guardian_id}':
+  #   get:
+  #     parameters:
+  #       - $ref: '#/parameters/guardian_id'
+  #     description: >
+  #       Get one activity using guardian_id
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         schema:
+  #           $ref: '#/definitions/ActivitiesCollection'
+  # '/activities/{kid_id}':
+  #   get:
+  #     parameters:
+  #       - $ref: '#/parameters/kid_id'
+  #     description: >
+  #       Get one activity using kid_id
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         schema:
+  #           $ref: '#/definitions/ActivitiesCollection'
   '/activities/delete':
     delete:
       description: >
@@ -636,6 +672,17 @@ paths:
     get:
       parameters:
         - $ref: '#/parameters/id'
+      description: >
+        Get one relationship
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/RelationshipsCollection'
+  '/relationships/{guardian_id}':
+    get:
+      parameters:
+        - $ref: '#/parameters/guardian_id'
       description: >
         Get one relationship
       responses:
@@ -727,6 +774,8 @@ paths:
                         type: integer
                       activity_id:
                         type: integer
+                      duration:
+                        type: integer
   '/interests/{id}':
     get:
       parameters:
@@ -760,6 +809,8 @@ paths:
                       kid_ids:
                         type: integer
                       activity_id:
+                        type: integer
+                      duration:
                         type: integer
   '/interests/delete':
     delete:

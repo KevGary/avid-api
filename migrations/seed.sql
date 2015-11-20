@@ -37,4 +37,4 @@ VALUES
 INSERT INTO
   interests
 VALUES
-  ( default, (SELECT id FROM kids WHERE id = 1), (SELECT id FROM activities WHERE id = 1) );
+  ( default, (SELECT id FROM kids WHERE id = 1), (SELECT id FROM activities WHERE id = 1), 20 );

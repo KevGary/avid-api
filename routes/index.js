@@ -9,30 +9,31 @@ var jwtSecret = process.env.SECRET;
 
 //pg config
 var pg = require('pg');
-var conString = process.env.DATABASE_URL
+var conString = process.env.DATABASE_URL;
 
 var storedUser = {
-      email: 'money',
-      password: 'p',
+      name: 'kev',
+      email: 'money@m.com',
+      password: 'p'
 }
-router.use(expressJwt({secret: process.env.SECRET}).unless({ path: [ '/login' ] }));
+router.use(expressJwt({secret: process.env.SECRET}).unless({ path: [ '/', '/login', '/register' ] }));
 //Authenticate
-router.get('/random-user', function(req, res, next) {
-  pg.connect(conString, function(err, client, done) {
-    if (err) {
-      return console.error('error fetching client from pool', err);
-    }
-    console.log("connected to database");
-    var random = Math.floor(Math.random() * (6)) + 1;
-    client.query('SELECT * FROM guardians WHERE id = $1', [random], function(err, result) {
-      done();
-      if (err) {
-        return console.error('error running query', err);
-      }
-      res.send(result);
-    });
-  });
-});
+// router.get('/random-user', function(req, res, next) {
+//   pg.connect(conString, function(err, client, done) {
+//     if (err) {
+//       return console.error('error fetching client from pool', err);
+//     }
+//     console.log("connected to database");
+//     var random = Math.floor(Math.random() * (6)) + 1;
+//     client.query('SELECT * FROM guardians WHERE id = $1', [random], function(err, result) {
+//       done();
+//       if (err) {
+//         return console.error('error running query', err);
+//       }
+//       res.send(result);
+//     });
+//   });
+// });
 // router.post('/register', function(req, res, next) {
 //   pg.connect(conString, function(err, client, done) {
 //     if (err) {
@@ -58,26 +59,46 @@ router.get('/random-user', function(req, res, next) {
 //     user: storedUser
 //   })
 // });
-router.post('/login', authenticate, function(req, res, next) {
-  var token = jwt.sign({
-    email: storedUser.email
-  }, jwtSecret);
-  res.send({
-    token: token,
-    user: storedUser
-  })
-});
-
-//UTIL FNCS
-function authenticate(req, res, next) {
+router.post('/login', function(req, res, next) {
   if(req.body.user.email == "" || req.body.user.password == "") {
     res.status(400).end('Must provide username and password');
   }
-  if(req.body.user.email !== storedUser.email || req.body.user.password !== storedUser.password) {
-    res.status(400).end('User or password incorrect');
-  }
-  next();
-}
+  pg.connect(conString, function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    console.log("connected to database");
+    client.query('SELECT * FROM guardians WHERE email = $1 AND password = $2', [req.body.user.email, req.body.user.password], function(err, result) {
+      done();
+      console.log(req.body.user)
+      if (err) {
+        return console.error('error running query', err);
+      } else if (result.rows.length < 1) {
+        res.status(400).end('User or password incorrect');
+      } else {
+        var token = jwt.sign({
+          id: result.rows[0].id
+        }, jwtSecret);
+        res.send({
+          token: token,
+          user: result.rows[0]
+        })
+      }
+    });
+  });
+
+});
+
+//UTIL FNCS
+// function authenticate(req, res, next) {
+//   if(req.body.user.email == "" || req.body.user.password == "") {
+//     res.status(400).end('Must provide username and password');
+//   }
+//   if(req.body.user.email !== storedUser.email || req.body.user.password !== storedUser.password) {
+//     res.status(400).end('User or password incorrect');
+//   }
+//   next();
+// }
 
 //Guardians
 //get all
@@ -104,8 +125,8 @@ router.post('/guardians', function(req, res, next) {
       return console.error('error fetching client from pool', err);
     }
     console.log("connected to database");
-    var hash = bcrypt.hashSync(req.body.data.attributes.password, 8);
-    client.query('INSERT INTO guardians(name, email, password) VALUES($1, $2, $3) returning id', [req.body.data.attributes.name, req.body.data.attributes.email, hash], function(err, result) {
+    // var hash = bcrypt.hashSync(req.body.data.attributes.password, 8);
+    client.query('INSERT INTO guardians(name, email, password) VALUES($1, $2, $3) returning id', [req.body.data.attributes.name, req.body.data.attributes.email, req.body.data.attributes.password], function(err, result) {
       done();
       if(err) {
         return console.error('error running query', err);
@@ -342,6 +363,40 @@ router.get('/activities/:id', function(req, res, next) {
     });
   });
 });
+// //get one using kid id
+// router.get('/activities/kid/:id', function(req, res, next) {
+//   pg.connect(conString, function(err, client, done) {
+//     if (err) {
+//       return console.error('error fetching client from pool', err);
+//     }
+//     console.log("connected to database");
+//     client.query('SELECT * FROM activities WHERE kid_id = $1', [req.params.id], function(err, result) {
+//       done();
+//       console.log(req.params.id)
+//       if (err) {
+//         return console.error('error running query', err);
+//       }
+//       res.send(result);
+//     });
+//   });
+// });
+// //get one using kid id
+// router.get('/activities/guardian/:id', function(req, res, next) {
+//   pg.connect(conString, function(err, client, done) {
+//     if (err) {
+//       return console.error('error fetching client from pool', err);
+//     }
+//     console.log("connected to database");
+//     client.query('SELECT * FROM activities WHERE guardian = $1', [req.params.id], function(err, result) {
+//       done();
+//       console.log(req.params.id)
+//       if (err) {
+//         return console.error('error running query', err);
+//       }
+//       res.send(result);
+//     });
+//   });
+// });
 // update one
 router.put('/activities/update/:id', function(req, res, next) {
   pg.connect(conString, function(err, client, done) {
@@ -436,7 +491,7 @@ router.get('/relationships/:id', function(req, res, next) {
       return console.error('error fetching client from pool', err);
     }
     console.log("connected to database");
-    client.query('SELECT * FROM relationships WHERE id = $1', [req.params.id], function(err, result) {
+    client.query('SELECT * FROM relationships WHERE guardian_id = $1', [req.params.id], function(err, result) {
       done();
       console.log(req.params.id)
       if (err) {
@@ -523,7 +578,7 @@ router.post('/interests', function(req, res, next) {
       return console.error('error fetching client from pool', err);
     }
     console.log("connected to database");
-    client.query('INSERT INTO interests(kid_id, activity_id) VALUES($1, $2) returning id', [req.body.data.attributes.kid_id, req.body.data.attributes.activity_id], function(err, result) {
+    client.query('INSERT INTO interests(kid_id, activity_id, duration) VALUES($1, $2, $3) returning id', [req.body.data.attributes.kid_id, req.body.data.attributes.activity_id, req.body.data.attributes.duration], function(err, result) {
       done();
       if(err) {
         return console.error('error running query', err);
@@ -542,7 +597,6 @@ router.get('/interests/:id', function(req, res, next) {
     console.log("connected to database");
     client.query('SELECT * FROM interests WHERE id = $1', [req.params.id], function(err, result) {
       done();
-      console.log(req.params.id)
       if (err) {
         return console.error('error running query', err);
       }
@@ -557,9 +611,8 @@ router.put('/interests/update/:id', function(req, res, next) {
       return console.error('error fetching client from pool', err);
     }
     console.log("connected to database");
-    client.query('UPDATE interests SET kid_id = $2, activity_id = $3 WHERE id = $1', [req.params.id, req.body.data.attributes.kid_id, req.body.data.attributes.activity_id], function(err, result) {
+    client.query('UPDATE interests SET kid_id = $2, activity_id = $3, duration = $4 WHERE id = $1', [req.params.id, req.body.data.attributes.kid_id, req.body.data.attributes.activity_id, req.body.data.attributes.duration], function(err, result) {
       done();
-      console.log(req.params.id)
       if (err) {
         return console.error('error running query', err);
       }

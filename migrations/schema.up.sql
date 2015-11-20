@@ -26,5 +26,6 @@ CREATE TABLE relationships (
 CREATE TABLE interests (
   id serial primary key,
   kid_id integer references kids(id) ON DELETE CASCADE,
-  activity_id integer references activities(id) ON DELETE cascade
+  activity_id integer references activities(id) ON DELETE cascade,
+  duration integer
 );
